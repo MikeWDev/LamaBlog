@@ -9,6 +9,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "gfx.rozrywka.radiozet.pl",
       },
+      {
+        protocol: "https",
+        hostname: "dummyimage.com",
+      },
     ],
   },
 };
