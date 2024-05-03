@@ -6,6 +6,7 @@ import PostUser from "@/components/postUser/postUser";
 
 export const generateMetadata = async ({ params }) => {
   const slug = params.id;
+
   const post = await getPost(slug);
   return {
     title: post.title,
@@ -19,12 +20,12 @@ const SinglePostPage = async ({ params }) => {
   return (
     <div className={styles.container}>
       <div className={styles.imgContainer}>
-        <Image alt="" fill src={`${post.img}`} />
+        {post.img && <Image alt="" fill src={post.img} />}
       </div>
       <div className={styles.textContainer}>
         <h1>{post.title}</h1>
         <div className={styles.detail}>
-          <PostUser userid={post.userid} />
+          <PostUser userid={post.created_by} />
           <div className={styles.detailText}>
             <span className={styles.detailsTitle}>Published</span>
             <span className={styles.detailValue}>27.04.2024</span>

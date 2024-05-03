@@ -4,6 +4,8 @@ import styles from "./links.module.css";
 import NavLink from "./navLink/navLink";
 import menu from "../../../../public/menu.png";
 import Image from "next/image";
+import { handleGithubLogout } from "@/lib/actions";
+
 const links = [
   {
     title: "Homepage",
@@ -23,10 +25,7 @@ const links = [
   },
 ];
 
-const isAdmin = true;
-const session = true;
-
-const Links = () => {
+const Links = ({ session }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -35,13 +34,17 @@ const Links = () => {
         {links.map((link) => (
           <NavLink item={link} key={link.title} />
         ))}
-        {session ? (
+        {session?.user ? (
           <>
-            {isAdmin && <NavLink item={{ title: "Admin", path: "/admin" }} />}
-            <button className={styles.logout}>Logout</button>
+            {session.user?.isAdmin && (
+              <NavLink item={{ title: "Admin", path: "/admin" }} />
+            )}
+            <form action={handleGithubLogout}>
+              <button className={styles.logout}>Logout</button>
+            </form>
           </>
         ) : (
-          <NavLink item={{ tittle: "Login", path: "/login" }} />
+          <NavLink item={{ title: "Login", path: "/login" }} />
         )}
       </div>
       <Image

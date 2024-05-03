@@ -6,14 +6,16 @@ const PostCard = ({ post }) => {
     <div className={styles.container}>
       <div className={styles.top}>
         <div className={styles.imageContainer}>
-          <Image src={post.image} alt="" fill className={styles.img} />
+          {post.image && (
+            <Image src={post.image} alt="" fill className={styles.img} />
+          )}
         </div>
         <span className={styles.date}>01.01.2024</span>
       </div>
       <div className={styles.bottom}>
         <h1>{post.title}</h1>
         <p>{post.body.slice(0, 200)}...</p>
-        <Link href={`/blog/${post.id}`}>READ MORE</Link>
+        <Link href={`/blog/${post.slug}`}>READ MORE</Link>
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ export const getPosts = async () => {
 export const getPost = async (slug) => {
   try {
     dbConnect();
+
     const result = await db.query("SELECT * FROM posts WHERE slug = $1; ", [
       slug,
     ]);
