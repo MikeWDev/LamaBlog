@@ -12,5 +12,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.github {
   width: 100%;
+  padding: 20px;
+  cursor: pointer;
 }
