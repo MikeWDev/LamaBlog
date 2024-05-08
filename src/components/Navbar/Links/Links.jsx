@@ -36,7 +36,7 @@ const Links = ({ session }) => {
         ))}
         {session?.user ? (
           <>
-            {session.user?.isAdmin && (
+            {session.user?.is_admin && (
               <NavLink item={{ title: "Admin", path: "/admin" }} />
             )}
             <form action={handleGithubLogout}>

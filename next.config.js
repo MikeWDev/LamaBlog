@@ -1,4 +1,7 @@
 const nextConfig = {
+  experimental: {
+    serverComponentsExternalPackages: ["pg"],
+  },
   images: {
     remotePatterns: [
       {
@@ -7,11 +10,19 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: "www.pexels.com",
+      },
+      {
+        protocol: "https",
         hostname: "gfx.rozrywka.radiozet.pl",
       },
       {
         protocol: "https",
         hostname: "dummyimage.com",
+      },
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
       },
     ],
   },

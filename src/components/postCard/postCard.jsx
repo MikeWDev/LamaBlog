@@ -6,8 +6,8 @@ const PostCard = ({ post }) => {
     <div className={styles.container}>
       <div className={styles.top}>
         <div className={styles.imageContainer}>
-          {post.image && (
-            <Image src={post.image} alt="" fill className={styles.img} />
+          {post.img && (
+            <Image src={post.img} alt="" fill className={styles.img} />
           )}
         </div>
         <span className={styles.date}>01.01.2024</span>

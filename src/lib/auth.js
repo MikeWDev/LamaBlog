@@ -10,6 +10,7 @@ const login = async (credentials) => {
     const user = await db.query("SELECT * FROM users WHERE username = $1", [
       credentials.username,
     ]);
+
     if (user.rowCount === 0) {
       throw new Error("User not found!");
     }
@@ -56,7 +57,7 @@ export const {
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account }) {
       if (account.provider === "github") {
         dbConnect();
         try {
@@ -64,13 +65,14 @@ export const {
             "SELECT * FROM users WHERE email = $1",
             [user.email]
           );
-          console.log(userAuth.rowCount);
+
           if (userAuth.rowCount === 0) {
             const date = new Date().toLocaleDateString();
             await db.query(
               "INSERT INTO users (username, email, createdat,img) VALUES ($1,$2,$3,$4)",
               [user.name, user.email, date, user.image]
             );
+
             console.log("user added");
           }
         } catch (error) {

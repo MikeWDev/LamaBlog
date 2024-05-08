@@ -4,11 +4,12 @@ export const authConfig = {
   },
   providers: [],
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
+    async jwt({ token, user, account }) {
+      if (user && account.provider === "credentials") {
         token.id = user.rows[0].id;
         token.is_admin = user.rows[0].is_admin;
       }
+
       return token;
     },
     async session({ session, token }) {
@@ -28,22 +29,18 @@ export const authConfig = {
       //ONLY ADMIN CAN REACH ADMIN DASHBOARD
 
       if (isOnAdminPanel && !user?.is_admin) {
-        console.log("checking admin ");
-
         return false;
       }
 
       //ONLY AUTH USERS CAN REACH BLOGPAGE
 
       if (isOnBlogPage && !user) {
-        console.log("checking blog");
         return false;
       }
 
       //ONLY UNAUTH USERS CAN REACH THE LOGIN PAGE
 
       if (isOnLoginPage && user) {
-        console.log("checking login");
         return Response.redirect(new URL("/", request.nextUrl));
       }
       return true;

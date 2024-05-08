@@ -5,6 +5,7 @@ export const getPosts = async () => {
     dbConnect();
     const res = await db.query("SELECT * FROM posts");
     const posts = res.rows;
+
     return posts;
   } catch (error) {
     console.log(error);
@@ -33,6 +34,18 @@ export const getUser = async (id) => {
     const posts = await db.query("SELECT * FROM users WHERE id = $1;", [id]);
 
     return posts.rows[0];
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to fetch single user");
+  }
+};
+export const getUsers = async () => {
+  noStore();
+  try {
+    dbConnect();
+    const users = await db.query("SELECT * FROM users ");
+
+    return users.rows;
   } catch (error) {
     console.log(error);
     throw new Error("Failed to fetch users");
