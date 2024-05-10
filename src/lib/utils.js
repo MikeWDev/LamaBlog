@@ -2,11 +2,11 @@ import pg from "pg";
 import "dotenv/config";
 
 export const db = new pg.Client({
-  user: `${process.env.DB_USER}`,
-  host: `${process.env.DB_HOST}`,
-  database: `${process.env.DB_DATABASE}`,
-  password: `${process.env.DB_PASSWORD}`,
-  port: `${process.env.DB_PORT}`,
+  user: `${process.env.POSTGRES_USER}`,
+  host: `${process.env.POSTGRES_HOST}`,
+  database: `${process.env.POSTGRES_DATABASE}`,
+  password: `${process.env.POSTGRES_PASSWORD}`,
+  port: `${process.env.POSTGRES_URL}`,
 });
 
 export const dbConnect = async () => {
