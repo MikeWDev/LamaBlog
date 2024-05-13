@@ -101,10 +101,11 @@ export const register = async (previousState, formData) => {
       return { error: "User already exists, please log in" };
     } else {
       const date = new Date().toLocaleDateString();
+      console.log(date);
       const salt = await bcrypt.genSalt(10);
 
       const hashedPassword = await bcrypt.hash(password, salt);
-      await sql`INSERT INTO users (username, email,password,createdat) VALUES (${username},${email},${hashedPassword},${date});`;
+      await sql`INSERT INTO users (username, email,password,created_at) VALUES (${username},${email},${hashedPassword},${date});`;
 
       return { succes: true };
     }
