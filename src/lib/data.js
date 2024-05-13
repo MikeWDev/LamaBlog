@@ -1,9 +1,10 @@
+import { sql } from "@vercel/postgres";
 import { db, dbConnect } from "./utils";
 import { unstable_noStore as noStore } from "next/cache";
 export const getPosts = async () => {
   try {
     dbConnect();
-    const res = await db.query("SELECT * FROM posts");
+    const res = await sql`SELECT * FROM posts`;
     const posts = res.rows;
 
     return posts;
@@ -16,9 +17,7 @@ export const getPost = async (slug) => {
   try {
     dbConnect();
 
-    const result = await db.query("SELECT * FROM posts WHERE slug = $1; ", [
-      slug,
-    ]);
+    const result = await sql`SELECT * FROM posts WHERE slug = ${slug};`;
     const post = result.rows[0];
 
     return post;
@@ -31,7 +30,7 @@ export const getUser = async (id) => {
   noStore();
   try {
     dbConnect();
-    const posts = await db.query("SELECT * FROM users WHERE id = $1;", [id]);
+    const posts = await sql`SELECT * FROM users WHERE id = ${id};`;
 
     return posts.rows[0];
   } catch (error) {
@@ -43,7 +42,7 @@ export const getUsers = async () => {
   noStore();
   try {
     dbConnect();
-    const users = await db.query("SELECT * FROM users ");
+    const users = await sql`SELECT * FROM users`;
 
     return users.rows;
   } catch (error) {

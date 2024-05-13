@@ -4,12 +4,12 @@ import CredentialProvider from "next-auth/providers/credentials";
 import { db, dbConnect } from "./utils";
 import bcrypt from "bcryptjs";
 import { authConfig } from "./auth.config";
+import { sql } from "@vercel/postgres";
 const login = async (credentials) => {
   try {
     dbConnect();
-    const user = await db.query("SELECT * FROM users WHERE username = $1", [
-      credentials.username,
-    ]);
+    const user =
+      await sql`SELECT * FROM users WHERE username = ${credentials.username}`;
 
     if (user.rowCount === 0) {
       throw new Error("User not found!");
@@ -61,17 +61,12 @@ export const {
       if (account.provider === "github") {
         dbConnect();
         try {
-          const userAuth = await db.query(
-            "SELECT * FROM users WHERE email = $1",
-            [user.email]
-          );
+          const userAuth =
+            await sql`SELECT * FROM users WHERE email = ${user.email}`;
 
           if (userAuth.rowCount === 0) {
             const date = new Date().toLocaleDateString();
-            await db.query(
-              "INSERT INTO users (username, email, createdat,img) VALUES ($1,$2,$3,$4)",
-              [user.name, user.email, date, user.image]
-            );
+            await sql`INSERT INTO users (username, email, createdat,img) VALUES (${user.name},${user.email},${date},${user.image});`;
 
             console.log("user added");
           }

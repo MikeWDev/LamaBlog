@@ -3,8 +3,8 @@ import { revalidatePath } from "next/cache";
 import { db, dbConnect } from "./utils";
 import { signIn, signOut } from "./auth";
 import bcrypt from "bcryptjs";
-import { redirect } from "next/navigation";
 
+import { sql } from "@vercel/postgres";
 //#####POST ACCTIONS#####
 
 export const addPost = async (previousState, formData) => {
@@ -16,10 +16,8 @@ export const addPost = async (previousState, formData) => {
   );
   try {
     dbConnect();
-    const post = await db.query(
-      "INSERT INTO posts (title, body, slug, created_by, created_at,img) VALUES ($1,$2,$3,$4,$5,$6)",
-      [title, desc, slug, userId, date, img]
-    );
+    const post =
+      await sql`INSERT INTO posts (title, body, slug, created_by, created_at,img) VALUES (${title},${desc},${slug},${userId},${date},${img});`;
     console.log("Post saved to database");
     revalidatePath("/blog");
     revalidatePath("/admin");
@@ -36,7 +34,7 @@ export const deletePost = async (formData) => {
 
   try {
     dbConnect();
-    await db.query("DELETE  FROM posts WHERE slug = $1", [slug]);
+    await sql`DELETE  FROM posts WHERE slug = ${slug};`;
     console.log("deleted post  from db");
     revalidatePath("/blog");
   } catch (error) {
@@ -53,10 +51,7 @@ export const addUser = async (previousState, formData) => {
 
   try {
     dbConnect();
-    await db.query(
-      "INSERT INTO users (username, email,password,createdat,is_admin,img) VALUES ($1,$2,$3,$4,$5,$6)",
-      [username, email, password, date, isAdmin, img]
-    );
+    await sql`INSERT INTO users (username, email,password,createdat,is_admin,img) VALUES (${username},${email},${password},${date},${isAdmin},${img});`;
 
     revalidatePath("/admin");
     console.log("saved to db");
@@ -71,8 +66,8 @@ export const deleteUser = async (formData) => {
 
   try {
     dbConnect();
-    await db.query("DELETE  FROM users WHERE id = $1", [id]);
-    await db.query("DELETE  FROM posts WHERE created_by = $1", [id]);
+    await sql`DELETE  FROM users WHERE id = ${id};`;
+    await sql`DELETE  FROM posts WHERE created_by = ${id}`;
     revalidatePath("/blog");
     revalidatePath("/admin");
 
@@ -100,9 +95,7 @@ export const register = async (previousState, formData) => {
   }
   try {
     dbConnect();
-    const userCheck = await db.query("SELECT * FROM users WHERE email = $1", [
-      email,
-    ]);
+    const userCheck = await sql`SELECT * FROM users WHERE email = ${email}`;
 
     if (userCheck.rowCount > 0) {
       return { error: "User already exists, please log in" };
@@ -111,10 +104,8 @@ export const register = async (previousState, formData) => {
       const salt = await bcrypt.genSalt(10);
 
       const hashedPassword = await bcrypt.hash(password, salt);
-      await db.query(
-        "INSERT INTO users (username, email,password,createdat) VALUES ($1,$2,$3,$4)",
-        [username, email, hashedPassword, date]
-      );
+      await sql`INSERT INTO users (username, email,password,createdat) VALUES (${username},${email},${hashedPassword},${date});`;
+
       return { succes: true };
     }
   } catch (error) {
