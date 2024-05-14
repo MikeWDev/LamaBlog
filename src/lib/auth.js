@@ -63,10 +63,10 @@ export const {
         try {
           const userAuth =
             await sql`SELECT * FROM users WHERE email = ${user.email}`;
-
+          console.log(userAuth);
           if (userAuth.rowCount === 0) {
             const date = new Date().toLocaleDateString();
-            await sql`INSERT INTO users (username, email, createdat,img) VALUES (${user.name},${user.email},${date},${user.image});`;
+            await sql`INSERT INTO users (username, email, created_at,img) VALUES (${user.name},${user.email},${date},${user.image});`;
 
             console.log("user added");
           }
