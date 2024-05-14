@@ -51,7 +51,7 @@ export const addUser = async (previousState, formData) => {
 
   try {
     dbConnect();
-    await sql`INSERT INTO users (username, email,password,createdat,is_admin,img) VALUES (${username},${email},${password},${date},${isAdmin},${img});`;
+    await sql`INSERT INTO users (username, email,password,created_at,is_admin,img) VALUES (${username},${email},${password},${date},${isAdmin},${img});`;
 
     revalidatePath("/admin");
     console.log("saved to db");
