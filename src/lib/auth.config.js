@@ -9,8 +9,10 @@ export const authConfig = {
         token.id = user.rows[0].id;
         token.is_admin = user.rows[0].is_admin;
       }
+
       if (user && account.provider === "github") {
-        console.log("ESSSSAAA");
+        token.id = user.id;
+        token.is_admin = true;
       }
       return token;
     },

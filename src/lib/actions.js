@@ -49,9 +49,12 @@ export const addUser = async (previousState, formData) => {
     Object.fromEntries(formData);
   const date = new Date().toLocaleDateString();
 
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
   try {
     dbConnect();
-    await sql`INSERT INTO users (username, email,password,created_at,is_admin,img) VALUES (${username},${email},${password},${date},${isAdmin},${img});`;
+    await sql`INSERT INTO users (username, email,password,created_at,is_admin,img) VALUES (${username},${email},${hashedPassword},${date},${isAdmin},${img});`;
 
     revalidatePath("/admin");
     console.log("saved to db");
@@ -101,7 +104,7 @@ export const register = async (previousState, formData) => {
       return { error: "User already exists, please log in" };
     } else {
       const date = new Date().toLocaleDateString();
-      console.log(date);
+
       const salt = await bcrypt.genSalt(10);
 
       const hashedPassword = await bcrypt.hash(password, salt);
